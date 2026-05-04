@@ -386,14 +386,14 @@
     margin-bottom: 64px;
   }
   .phases-header .science-title { margin-bottom: 0; }
-  .science-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--light); border: 1px solid var(--light); margin-top: 56px; }
-  .sci-card { background: #ffffff; padding: 0; overflow: hidden; }
-  .sci-img { width: 100%; height: 200px; overflow: hidden; }
+  .science-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 56px; }
+  .sci-card { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
+  .sci-img { width: 100%; height: 160px; overflow: hidden; }
   .sci-img img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
-  .sci-body { padding: 36px 40px 40px; }
-  .sci-num { font-size: 11px; font-weight: 500; color: var(--light); letter-spacing: 0.1em; margin-bottom: 16px; }
-  .sci-card h3 { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; margin-bottom: 16px; }
-  .sci-card p { font-size: 14px; font-weight: 300; color: var(--mid); line-height: 1.8; }
+  .sci-body { padding: 24px 24px 28px; }
+  .sci-num { font-size: 11px; font-weight: 500; color: var(--light); letter-spacing: 0.1em; margin-bottom: 12px; }
+  .sci-card h3 { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.3; margin-bottom: 12px; }
+  .sci-card p { font-size: 13px; font-weight: 300; color: var(--mid); line-height: 1.75; }
 
   /* PHASES */
   .phase { display: grid; grid-template-columns: 200px 1fr; gap: 56px; padding: 56px 0; border-top: 1px solid var(--light); align-items: start; }
@@ -447,7 +447,8 @@
     .stats { padding: 0 24px; grid-template-columns: 1fr 1fr; }
     .stat:last-child { padding-left: 0; }
     .stat + .stat { padding-left: 24px; }
-    .science-grid, .team-grid { grid-template-columns: 1fr; }
+    .science-grid { grid-template-columns: 1fr 1fr; }
+    .team-grid { grid-template-columns: 1fr; }
     .phase { grid-template-columns: 1fr; gap: 16px; padding: 40px 0; }
     .pub-item { grid-template-columns: 1fr; gap: 8px; padding: 28px 0; }
     footer { flex-direction: column; gap: 12px; text-align: center; padding: 24px; }
@@ -522,35 +523,35 @@
   <h2 class="science-title">Backed by science.</h2>
   <div class="science-grid">
     <div class="sci-card">
-      <div class="sci-img"><img src="science1.jpg" alt="Attachment theory"></div>
+      <div class="sci-img"><img src="science1.jpg" alt="Personality & Attachment"></div>
       <div class="sci-body">
         <div class="sci-num">01</div>
-        <h3>Attachment theory &amp; longitudinal data</h3>
-        <p>Drawing from Bowlby, Hazan &amp; Shaver, and 40 years of attachment research, we model relational styles and predict long-term dyadic stability with validated psychometric instruments.</p>
+        <h3>Personality &amp; Attachment Intelligence</h3>
+        <p>We use advanced generative AI to uncover nuanced personality traits and attachment patterns, translating them into meaningful compatibility insights for modern relationships.</p>
       </div>
     </div>
     <div class="sci-card">
-      <div class="sci-img"><img src="science2.jpg" alt="Neurobiological markers"></div>
+      <div class="sci-img"><img src="science2.jpg" alt="Predicting Chemistry"></div>
       <div class="sci-body">
         <div class="sci-num">02</div>
-        <h3>Neurobiological compatibility markers</h3>
-        <p>We examine HLA-mediated immune diversity, oxytocin receptor polymorphisms, and cortisol synchrony — biological signals that influence pair bonding beyond conscious preference.</p>
+        <h3>Predicting Chemistry</h3>
+        <p>By analyzing data from thousands of real dating outcomes, our models identify patterns that help predict who you're most likely to connect with—before you even meet.</p>
       </div>
     </div>
     <div class="sci-card">
-      <div class="sci-img"><img src="science3.jpg" alt="Bayesian modelling"></div>
+      <div class="sci-img"><img src="science3.jpg" alt="Continuous Feedback"></div>
       <div class="sci-body">
         <div class="sci-num">03</div>
-        <h3>Bayesian compatibility modelling</h3>
-        <p>Our matching algorithm is a probabilistic model, not a rule-set. It updates continuously from participant outcomes, treating each long-term relationship as new evidence.</p>
+        <h3>Continuous Feedback Loop</h3>
+        <p>Every date is followed by a guided debrief with your AI matchmaker, capturing signals of success and friction to continuously refine and improve your future matches.</p>
       </div>
     </div>
     <div class="sci-card">
-      <div class="sci-img"><img src="science4.jpg" alt="Longitudinal tracking"></div>
+      <div class="sci-img"><img src="science4.jpg" alt="Implicit Signals"></div>
       <div class="sci-body">
         <div class="sci-num">04</div>
-        <h3>Longitudinal outcome tracking</h3>
-        <p>Unlike survey-based studies, we track matched pairs at 3, 12, 36, and 60 months — measuring relationship quality, conflict resolution, and sustained satisfaction.</p>
+        <h3>Implicit Signals</h3>
+        <p>Your interactions with AI reveal subtle behavioral and emotional cues. This rich, previously untapped data allows us to understand how you communicate and who you naturally align with.</p>
       </div>
     </div>
   </div>
