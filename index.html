@@ -5,18 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Singular Project</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --cream: #f7f4f0;
+    --cream: #ffffff;
     --black: #0e0e0e;
     --mid: #888884;
     --light: #d0cdc8;
     --white: #ffffff;
   }
   html { scroll-behavior: smooth; }
-  body { background: var(--cream); color: var(--black); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; font-weight: 300; }
+  html.scroll-locked { overflow: hidden; }
+  body { background: var(--cream); color: var(--black); font-family: 'Google Sans Flex', 'Inter', sans-serif; -webkit-font-smoothing: antialiased; font-weight: 300; }
 
   /* NAV */
   nav {
@@ -81,18 +82,282 @@
 
   /* SHARED */
   .label {
-    font-size: 11px; font-weight: 500; letter-spacing: 0.16em;
-    text-transform: uppercase; color: var(--mid); margin-bottom: 48px;
+    font-size: 15px; font-weight: 500; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--mid); margin-bottom: 10px;
   }
   .section { padding: 120px 56px; border-top: 1px solid var(--light); }
 
   /* MISSION */
   .mission { padding: 120px 56px; border-top: 1px solid var(--light); }
   .mission-headline {
-    font-size: clamp(32px, 4.5vw, 64px); font-weight: 700;
+    font-size: clamp(32px, 4.5vw, 64px); font-weight: 800;
     line-height: 1.08; letter-spacing: -0.025em; max-width: 900px;
   }
   .mission-headline span { color: var(--mid); font-weight: 300; }
+
+  /* MISSION */
+  .mission-scroll-wrapper {
+    height: 250vh;
+    position: relative;
+  }
+  .mission-section {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    border-top: 1px solid var(--light);
+  }
+  .dots-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .dots-video.playing {
+    opacity: 1;
+  }
+  .mission-text {
+    position: relative;
+    z-index: 2;
+    padding: 0 56px;
+    transition: opacity 0.5s ease;
+  }
+  .mission-text.hidden {
+    opacity: 0;
+  }
+  .mission-ending {
+    position: absolute;
+    z-index: 3;
+    padding: 0 56px;
+    opacity: 0;
+    transition: opacity 1s ease;
+    pointer-events: none;
+  }
+  .mission-ending .mission-headline { font-weight: 400; }
+  .mission-ending.visible {
+    opacity: 1;
+  }
+  @media (max-width: 768px) {
+    .mission-ending { padding: 0 24px; }
+  }
+  .mission-text .label { color: var(--mid); margin-bottom: 16px; }
+  .mission-text .mission-headline {
+    font-size: clamp(32px, 4.5vw, 64px); font-weight: 400;
+    line-height: 1.08; letter-spacing: -0.025em; max-width: 900px;
+  }
+  .mission-ending .mission-headline {
+    font-weight: 400;
+  }
+  .mission-word {
+    color: #d1d1d0;
+    transition: color 0.1s ease;
+    display: inline;
+  }
+  .mission-word.lit {
+    color: var(--black);
+  }
+
+  @media (max-width: 768px) {
+    .mission-text { padding: 0 24px; }
+    .mission-scroll-wrapper { height: 300vh; }
+  }
+
+  /* PHASES */
+  .phases-label { text-align: center; }
+  .phases-title { text-align: center; }
+  .phases-section {
+    padding: 120px 56px;
+    border-top: 1px solid var(--light);
+  }
+  .phases-inner {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* 3-column grid: [dot col] [label col] [card col]
+     Row height = card height. Dot is absolute at 50% of row. Lines are ::before/::after. */
+  .phase-row {
+    display: grid;
+    grid-template-columns: 32px 100px 1fr;
+    column-gap: 16px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .phase-row.last { margin-bottom: 0; }
+
+  /* Col 1: the dot column. Dot is absolute, centered vertically in the row. */
+  .col-dot {
+    position: relative;
+  }
+  .phase-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1.5px solid var(--black);
+    background: #ffffff;
+    z-index: 2;
+  }
+  .phase-dot.active { background: var(--black); box-shadow: 0 0 0 4px rgba(0,0,0,0.1); }
+  .phase-dot.faded { border-color: var(--light); }
+
+  /* Line above the dot: from top of row to dot center (50%) */
+  .col-dot::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    height: 50%;
+    width: 1.5px;
+    background: var(--light);
+    z-index: 1;
+  }
+  /* Line below the dot: from dot center (50%) to bottom of row + gap to next row */
+  .col-dot::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 50%;
+    bottom: -24px; /* bridges the margin-bottom gap */
+    width: 1.5px;
+    background: var(--light);
+    z-index: 1;
+  }
+  /* First row: no line above dot */
+  .phase-row.first .col-dot::before { display: none; }
+  /* Last row: no line below dot */
+  .phase-row.last .col-dot::after { display: none; }
+
+  /* Col 2: label centered vertically */
+  .col-label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .phase-num {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+  .phase-period {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--black);
+  }
+  .col-label.faded .phase-num,
+  .col-label.faded .phase-period { color: var(--light); }
+
+  /* Card */
+  .phase-card {
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    border: none;
+  }
+  .phase-card.faded {
+    box-shadow: none;
+    border: 1.5px solid #dcdcdc;
+  }
+  .phase-card-top {
+    padding: 28px 28px 0;
+    text-align: center;
+  }
+  .phase-card-video {
+    margin: 20px auto 0;
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    width: 160px;
+  }
+  .phase-card-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .phase-title {
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--black);
+  }
+  .phase-card.faded .phase-title { color: var(--light); }
+  .phase-card-body { padding: 20px 28px; }
+  .phase-desc {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--mid);
+    line-height: 1.4;
+    text-align: center;
+  }
+  .phase-card.faded .phase-desc { color: var(--light); }
+  .phase-card-foot {
+    padding: 0 28px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .phase-status-pill {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--mid);
+    border: 1px solid var(--light);
+    border-radius: 999px;
+    padding: 8px 20px;
+  }
+  .phase-status-pill.faded { color: var(--light); border-color: #e8e6e2; }
+  .phase-apply-btn {
+    display: inline-block;
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+    background: var(--black);
+    border-radius: 999px;
+    padding: 14px 32px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .phase-apply-btn:hover { opacity: 0.75; }
+  .phase-cta-note {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--mid);
+  }
+
+  /* Reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .phase-row:nth-child(2).reveal { transition-delay: 0.1s; }
+  .phase-row:nth-child(3).reveal { transition-delay: 0.2s; }
+
+  @media (max-width: 768px) {
+    .phases-section { padding: 80px 24px; }
+    .phase-card-top, .phase-card-body, .phase-card-foot { padding-left: 20px; padding-right: 20px; }
+  }
 
   /* STATS */
   .stats {
@@ -106,6 +371,19 @@
   .stat-d { font-size: 13px; font-weight: 300; color: var(--mid); line-height: 1.6; }
 
   /* SCIENCE */
+  .science-title {
+    font-size: clamp(32px, 4.5vw, 64px);
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    margin-bottom: 48px;
+    margin-top: 8px;
+  }
+  .phases-header {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+  .phases-header .science-title { margin-bottom: 0; }
   .science-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--light); border: 1px solid var(--light); margin-top: 56px; }
   .sci-card { background: var(--cream); padding: 48px 44px; }
   .sci-num { font-size: 11px; font-weight: 500; color: var(--light); letter-spacing: 0.1em; margin-bottom: 28px; }
@@ -141,13 +419,13 @@
   /* JOIN */
   .join { background: var(--black); color: var(--white); padding: 140px 56px; }
   .join .label { color: #3a3a38; }
-  .join-headline { font-size: clamp(32px, 4.5vw, 64px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.06; max-width: 820px; margin-bottom: 72px; }
+  .join-headline { font-size: clamp(32px, 4.5vw, 64px); font-weight: 800; letter-spacing: -0.025em; line-height: 1.06; max-width: 820px; margin-bottom: 72px; }
   .join-headline span { color: #3a3a38; font-weight: 300; }
   .join-form { display: flex; max-width: 500px; margin-bottom: 20px; gap: 12px; }
-  .join-input { flex: 1; padding: 16px 22px; background: transparent; border: 1px solid #2a2a28; border-radius: 999px; color: var(--white); font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 300; outline: none; transition: border-color 0.2s; }
+  .join-input { flex: 1; padding: 16px 22px; background: transparent; border: 1px solid #2a2a28; border-radius: 999px; color: var(--white); font-family: 'Google Sans Flex', 'Inter', sans-serif; font-size: 14px; font-weight: 300; outline: none; transition: border-color 0.2s; }
   .join-input::placeholder { color: #444; }
   .join-input:focus { border-color: #555; }
-  .join-btn { padding: 16px 28px; background: var(--white); color: var(--black); border: none; border-radius: 999px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; white-space: nowrap; }
+  .join-btn { padding: 16px 28px; background: var(--white); color: var(--black); border: none; border-radius: 999px; font-family: 'Google Sans Flex', 'Inter', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; white-space: nowrap; }
   .join-btn:hover { opacity: 0.8; }
   .join-note { font-size: 12px; font-weight: 300; color: #3a3a38; }
 
@@ -214,34 +492,31 @@
 </section>
 
 <!-- MISSION -->
-<section class="mission" id="mission">
-  <div class="label">Mission</div>
-  <h2 class="mission-headline">We use science and data to solve one of the oldest human problems. <span>Finding the right person.</span></h2>
-</section>
-
-<!-- STATS -->
-<div class="stats">
-  <div class="stat">
-    <div class="stat-n">4,200+</div>
-    <div class="stat-d">Participants enrolled<br>to date</div>
-  </div>
-  <div class="stat">
-    <div class="stat-n">18</div>
-    <div class="stat-d">Validated compatibility<br>variables</div>
-  </div>
-  <div class="stat">
-    <div class="stat-n">91%</div>
-    <div class="stat-d">Predictive accuracy<br>at 12-month follow-up</div>
-  </div>
-  <div class="stat">
-    <div class="stat-n">7</div>
-    <div class="stat-d">Peer-reviewed<br>publications</div>
-  </div>
+<div class="mission-scroll-wrapper" id="mission-wrapper">
+  <section class="mission-section" id="mission">
+    <video
+      id="dots-video"
+      class="dots-video"
+      muted
+      playsinline
+      preload="auto"
+      src="dots-girl.mp4"
+    ></video>
+    <div class="mission-text" id="mission-text">
+      <div class="label">Our mission</div>
+      <h2 class="mission-headline" id="mission-headline">We use science and data to solve one of the oldest human problems.</h2>
+    </div>
+    <div class="mission-ending" id="mission-ending">
+      <div class="label" style="margin-bottom:10px;">Our mission</div>
+      <h2 class="mission-headline">Finding the one.</h2>
+    </div>
+  </section>
 </div>
 
 <!-- SCIENCE -->
 <section class="section" id="science">
   <div class="label">Backed by science</div>
+  <h2 class="science-title">We believe in science.</h2>
   <div class="science-grid">
     <div class="sci-card">
       <div class="sci-num">01</div>
@@ -266,42 +541,86 @@
   </div>
 </section>
 
+
 <!-- PHASES -->
-<section class="section" id="phases">
-  <div class="label">Project phases</div>
-  <div>
-    <div class="phase">
-      <div>
-        <div class="phase-num">Phase I</div>
-        <div class="phase-period">2024 – 2025</div>
-        <span class="badge">Complete</span>
+<section class="phases-section" id="phases">
+  <div class="phases-header">
+    <div class="label">Our journey</div>
+    <h2 class="science-title">3 phases of research.</h2>
+  </div>
+  <div class="phases-inner">
+
+    <!-- Phase 1: no line above dot, line below -->
+    <div class="phase-row reveal first">
+      <div class="col-dot">
+        <div class="phase-dot"></div>
       </div>
-      <div>
-        <h3>Foundation &amp; instrument validation</h3>
-        <p>Development and validation of the Singular Compatibility Battery — a 220-item assessment covering attachment, values, cognitive style, biological markers, and life trajectory. Validated across 1,800 participants in 12 countries.</p>
+      <div class="col-label">
+        <span class="phase-num">Phase 1</span>
+        <span class="phase-period">2023–25</span>
       </div>
-    </div>
-    <div class="phase">
-      <div>
-        <div class="phase-num">Phase II</div>
-        <div class="phase-period">2025 – 2026</div>
-        <span class="badge active">Active</span>
-      </div>
-      <div>
-        <h3>Matching trials &amp; algorithm refinement</h3>
-        <p>Controlled matching trials with 4,200 enrolled participants. Pairs are matched algorithmically and followed prospectively. Real-world outcome data is fed back into the Bayesian model in quarterly update cycles.</p>
+      <div class="phase-card">
+        <div class="phase-card-top"><h3 class="phase-title">Date data collection</h3></div>
+        <div class="phase-card-video"><video autoplay muted loop playsinline src="dots-phase1.mp4"></video></div>
+        <div class="phase-card-body"><p class="phase-desc">Collection of outcome data from over 10,000 dates. Participants pre-screened and mutually confirmed prior to each encounter.</p></div>
+        <div class="phase-card-foot"><span class="phase-status-pill">Completed</span></div>
       </div>
     </div>
-    <div class="phase">
-      <div>
-        <div class="phase-num">Phase III</div>
-        <div class="phase-period">2027 – 2029</div>
-        <span class="badge">Forthcoming</span>
+
+    <!-- Phase 2: line above and below dot -->
+    <div class="phase-row reveal">
+      <div class="col-dot">
+        <div class="phase-dot active"></div>
       </div>
-      <div>
-        <h3>Open protocol &amp; global deployment</h3>
-        <p>Publication of the full matching protocol as an open standard. Partnerships with research institutions and clinical practices worldwide. Our goal: make rigorous, science-based partnership matching universally accessible.</p>
+      <div class="col-label">
+        <span class="phase-num">Phase 2</span>
+        <span class="phase-period">Ongoing</span>
       </div>
+      <div class="phase-card">
+        <div class="phase-card-top"><h3 class="phase-title">Human-assisted blind dates</h3></div>
+        <div class="phase-card-video"><video autoplay muted loop playsinline src="dots-phase2.mp4"></video></div>
+        <div class="phase-card-body"><p class="phase-desc">Compatibility algorithm trained on Phase 1 data, now deployed to schedule blind dates between highest-compatibility candidates. All matches reviewed by human researchers.</p></div>
+        <div class="phase-card-foot">
+          <a href="#join" class="phase-apply-btn">Apply to phase 2</a>
+          <span class="phase-cta-note">New York City only</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 3: line above dot, no line below -->
+    <div class="phase-row reveal last">
+      <div class="col-dot">
+        <div class="phase-dot faded"></div>
+      </div>
+      <div class="col-label faded">
+        <span class="phase-num">Phase 3</span>
+        <span class="phase-period">2027</span>
+      </div>
+      <div class="phase-card faded">
+        <div class="phase-card-top"><h3 class="phase-title">Public roll-out</h3></div>
+        <div class="phase-card-video"><video autoplay muted loop playsinline src="dots-phase3.mp4"></video></div>
+        <div class="phase-card-body"><p class="phase-desc">Full deployment of matching protocol at scale, with no human intermediary.</p></div>
+        <div class="phase-card-foot"><span class="phase-status-pill faded">Forthcoming</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+class="team-card">
+      <div class="team-name">Dr. Alice Whitfield</div>
+      <div class="team-role">Longitudinal Research</div>
+      <div class="team-bio">Attachment theory, dyadic longitudinal methodology, relationship quality measurement.</div>
+    </div>
+    <div class="team-card">
+      <div class="team-name">Per Larsson</div>
+      <div class="team-role">Algorithm Engineer</div>
+      <div class="team-bio">Machine learning, probabilistic graphical models, large-scale data infrastructure.</div>
+    </div>
+    <div class="team-card">
+      <div class="team-name">Dr. Iris Romano</div>
+      <div class="team-role">Ethics &amp; Oversight</div>
+      <div class="team-bio">Research ethics, participant privacy, IRB liaison. Ensures all protocols meet international standards.</div>
     </div>
   </div>
 </section>
@@ -309,6 +628,7 @@
 <!-- PUBLICATIONS -->
 <section class="section" id="publications">
   <div class="label">Our publications</div>
+  <h2 class="science-title">Peer-reviewed research.</h2>
   <div>
     <div class="pub-item">
       <div class="pub-year">2025</div>
@@ -349,43 +669,6 @@
   </div>
 </section>
 
-<!-- TEAM -->
-<section class="section" id="team">
-  <div class="label">Research team</div>
-  <div class="team-grid">
-    <div class="team-card">
-      <div class="team-name">Dr. Mara Reyes</div>
-      <div class="team-role">Principal Investigator</div>
-      <div class="team-bio">Computational social science, relationship science, Bayesian modelling. Former: Stanford Human Interaction Lab.</div>
-    </div>
-    <div class="team-card">
-      <div class="team-name">Dr. Tunde Okafor</div>
-      <div class="team-role">Lead Biologist</div>
-      <div class="team-bio">Evolutionary biology, neuroendocrinology, genetic compatibility. Former: Max Planck Institute for Evolutionary Anthropology.</div>
-    </div>
-    <div class="team-card">
-      <div class="team-name">Dr. Lin Chen</div>
-      <div class="team-role">Psychometrics Lead</div>
-      <div class="team-bio">Psychometric assessment, cross-cultural validity, personality structure. Former: University of Cambridge.</div>
-    </div>
-    <div class="team-card">
-      <div class="team-name">Dr. Alice Whitfield</div>
-      <div class="team-role">Longitudinal Research</div>
-      <div class="team-bio">Attachment theory, dyadic longitudinal methodology, relationship quality measurement.</div>
-    </div>
-    <div class="team-card">
-      <div class="team-name">Per Larsson</div>
-      <div class="team-role">Algorithm Engineer</div>
-      <div class="team-bio">Machine learning, probabilistic graphical models, large-scale data infrastructure.</div>
-    </div>
-    <div class="team-card">
-      <div class="team-name">Dr. Iris Romano</div>
-      <div class="team-role">Ethics &amp; Oversight</div>
-      <div class="team-bio">Research ethics, participant privacy, IRB liaison. Ensures all protocols meet international standards.</div>
-    </div>
-  </div>
-</section>
-
 <!-- JOIN -->
 <section class="join" id="join">
   <div class="label">Join the project</div>
@@ -402,5 +685,128 @@
   <div class="footer-note">© 2025 Singular Project · Open Science Initiative</div>
 </footer>
 
+
+<script>
+(function() {
+  var wrapper  = document.getElementById('mission-wrapper');
+  var section  = document.getElementById('mission');
+  var text     = document.getElementById('mission-text');
+  var headline = document.getElementById('mission-headline');
+  var video    = document.getElementById('dots-video');
+  if (!wrapper || !section || !text || !headline || !video) return;
+
+  // --- Split headline into word spans ---
+  var words = headline.textContent.trim().split(/\s+/);
+  headline.innerHTML = words.map(function(w) {
+    return '<span class="mission-word">' + w + '</span>';
+  }).join(' ');
+  var wordSpans = headline.querySelectorAll('.mission-word');
+  var totalWords = wordSpans.length;
+
+  // --- Scroll lock ---
+  var scrollLocked = false;
+  var safetyTimeout = null;
+  var SAFETY_MS = 10000;
+
+  function lockScroll() {
+    if (scrollLocked) return;
+    document.documentElement.classList.add('scroll-locked');
+    scrollLocked = true;
+    safetyTimeout = setTimeout(unlockScroll, SAFETY_MS);
+  }
+
+  function unlockScroll() {
+    if (!scrollLocked) return;
+    if (safetyTimeout) { clearTimeout(safetyTimeout); safetyTimeout = null; }
+    document.documentElement.classList.remove('scroll-locked');
+    scrollLocked = false;
+  }
+
+  // --- Video trigger (runs once, after text is fully lit) ---
+  var videoTriggered = false;
+
+  function triggerVideo() {
+    if (videoTriggered) return;
+    videoTriggered = true;
+
+    // Lock scroll
+    lockScroll();
+
+    // Start video immediately (overlap with text still visible)
+    video.classList.add('playing');
+    video.play().catch(function() { unlockScroll(); });
+
+    // Fade text out slightly after video starts (300ms overlap)
+    setTimeout(function() {
+      text.classList.add('hidden');
+    }, 300);
+  }
+
+  // Release on video end
+  video.addEventListener('ended', function() {
+    var ending = document.getElementById('mission-ending');
+    if (ending) {
+      ending.classList.add('visible');
+      // Let user read it for 1.8s then unlock
+      setTimeout(function() {
+        unlockScroll();
+      }, 1800);
+    } else {
+      unlockScroll();
+    }
+  });
+
+  // --- Scroll handler: word colorization ---
+  function onScroll() {
+    if (videoTriggered) return;
+
+    var rect    = wrapper.getBoundingClientRect();
+    var wrapH   = wrapper.offsetHeight;
+    var viewH   = window.innerHeight;
+
+    // progress: 0 when wrapper top hits viewport top, 1 when wrapper bottom hits viewport bottom
+    var scrolled = -rect.top;
+    var total    = wrapH - viewH;
+    var progress = Math.max(0, Math.min(1, scrolled / total));
+
+    // How many words to light up
+    var litCount = Math.round(progress * totalWords);
+
+    wordSpans.forEach(function(span, i) {
+      if (i < litCount) {
+        span.classList.add('lit');
+      } else {
+        span.classList.remove('lit');
+      }
+    });
+
+    // When all words are lit, trigger video
+    if (litCount >= totalWords) {
+      triggerVideo();
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+})();
+</script>
+
+<script>
+(function() {
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(function(el) {
+    revealObserver.observe(el);
+  });
+})();
+</script>
 </body>
 </html>
