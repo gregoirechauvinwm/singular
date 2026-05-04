@@ -61,7 +61,7 @@
   }
   .hero-content { position: relative; z-index: 2; }
   .hero-headline {
-    font-size: clamp(36px, 7vw, 80px); font-weight: 700;
+    font-size: clamp(36px, 7vw, 80px); font-weight: 500;
     line-height: 1.08; letter-spacing: -0.02em;
     color: var(--white); margin-bottom: 20px;
   }
@@ -155,12 +155,12 @@
   .mission-ending .mission-headline {
     font-weight: 400;
   }
-  .mission-word {
+  .mission-headline .mission-word {
     color: #d1d1d0;
     transition: color 0.1s ease;
     display: inline;
   }
-  .mission-word.lit {
+  .mission-headline .mission-word.lit {
     color: var(--black);
   }
 
@@ -178,7 +178,7 @@
   }
   .phases-inner {
     max-width: 600px;
-    margin: 0 auto;
+    margin: 48px auto 0;
   }
 
   /* 3-column grid: [dot col] [label col] [card col]
@@ -187,7 +187,7 @@
     display: grid;
     grid-template-columns: 32px 100px 1fr;
     column-gap: 16px;
-    margin-bottom: 24px;
+    margin-bottom: 0;
     position: relative;
   }
   .phase-row.last { margin-bottom: 0; }
@@ -230,7 +230,7 @@
     left: 50%;
     transform: translateX(-50%);
     top: 50%;
-    bottom: -24px; /* bridges the margin-bottom gap */
+    bottom: -56px; /* bridges the card margin-bottom gap */
     width: 1.5px;
     background: var(--light);
     z-index: 1;
@@ -270,7 +270,9 @@
     overflow: hidden;
     box-shadow: 0 4px 24px rgba(0,0,0,0.07);
     border: none;
+    margin-bottom: 56px;
   }
+  .phase-row.last .phase-card { margin-bottom: 0; }
   .phase-card.faded {
     box-shadow: none;
     border: 1.5px solid #dcdcdc;
@@ -347,12 +349,12 @@
   /* Reveal */
   .reveal {
     opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    transform: translateY(64px);
+    transition: opacity 1.4s cubic-bezier(0.16,1,0.3,1), transform 1.4s cubic-bezier(0.16,1,0.3,1);
   }
   .reveal.visible { opacity: 1; transform: translateY(0); }
-  .phase-row:nth-child(2).reveal { transition-delay: 0.1s; }
-  .phase-row:nth-child(3).reveal { transition-delay: 0.2s; }
+  .phase-row:nth-child(2).reveal { transition-delay: 0.2s; }
+  .phase-row:nth-child(3).reveal { transition-delay: 0.4s; }
 
   @media (max-width: 768px) {
     .phases-section { padding: 80px 24px; }
@@ -385,8 +387,11 @@
   }
   .phases-header .science-title { margin-bottom: 0; }
   .science-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--light); border: 1px solid var(--light); margin-top: 56px; }
-  .sci-card { background: var(--cream); padding: 48px 44px; }
-  .sci-num { font-size: 11px; font-weight: 500; color: var(--light); letter-spacing: 0.1em; margin-bottom: 28px; }
+  .sci-card { background: #ffffff; padding: 0; overflow: hidden; }
+  .sci-img { width: 100%; height: 200px; overflow: hidden; }
+  .sci-img img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  .sci-body { padding: 36px 40px 40px; }
+  .sci-num { font-size: 11px; font-weight: 500; color: var(--light); letter-spacing: 0.1em; margin-bottom: 16px; }
   .sci-card h3 { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; margin-bottom: 16px; }
   .sci-card p { font-size: 14px; font-weight: 300; color: var(--mid); line-height: 1.8; }
 
@@ -401,20 +406,18 @@
   .phase p { font-size: 14px; font-weight: 300; color: var(--mid); line-height: 1.85; max-width: 560px; }
 
   /* PUBLICATIONS */
-  .pub-item { display: grid; grid-template-columns: 64px 1fr 120px; gap: 40px; padding: 36px 0; border-top: 1px solid var(--light); align-items: start; }
+  .pub-item { display: flex; align-items: center; gap: 40px; padding: 36px 0; border-top: 1px solid var(--light); }
   .pub-item:last-child { border-bottom: 1px solid var(--light); }
-  .pub-year { font-size: 13px; font-weight: 300; color: var(--mid); padding-top: 3px; }
+  .pub-year { font-size: 13px; font-weight: 300; color: var(--mid); flex-shrink: 0; width: 80px; }
+  .pub-content { flex: 1; }
   .pub-title { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.35; margin-bottom: 8px; }
   .pub-authors { font-size: 13px; font-weight: 300; color: var(--mid); }
   .pub-journal { font-size: 12px; font-weight: 300; color: var(--light); margin-top: 3px; }
   .pub-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 12px; border: 1px solid var(--light); color: var(--mid); white-space: nowrap; text-align: center; border-radius: 999px; margin-top: 4px; }
+  .pub-read-btn { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: var(--black); border: 1.5px solid var(--black); padding: 10px 24px; border-radius: 999px; text-decoration: none; white-space: nowrap; transition: background 0.2s, color 0.2s; }
+  .pub-read-btn:hover { background: var(--black); color: #fff; }
 
-  /* TEAM */
-  .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--light); border: 1px solid var(--light); margin-top: 56px; }
-  .team-card { background: var(--cream); padding: 44px 36px; }
-  .team-name { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 4px; }
-  .team-role { font-size: 11px; font-weight: 500; color: var(--mid); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid var(--light); }
-  .team-bio { font-size: 13px; font-weight: 300; color: var(--mid); line-height: 1.75; }
+
 
   /* JOIN */
   .join { background: var(--black); color: var(--white); padding: 140px 56px; }
@@ -515,28 +518,40 @@
 
 <!-- SCIENCE -->
 <section class="section" id="science">
-  <div class="label">Backed by science</div>
-  <h2 class="science-title">We believe in science.</h2>
+  <div class="label">Our methodology</div>
+  <h2 class="science-title">Backed by science.</h2>
   <div class="science-grid">
     <div class="sci-card">
-      <div class="sci-num">01</div>
-      <h3>Attachment theory &amp; longitudinal data</h3>
-      <p>Drawing from Bowlby, Hazan &amp; Shaver, and 40 years of attachment research, we model relational styles and predict long-term dyadic stability with validated psychometric instruments.</p>
+      <div class="sci-img"><img src="science1.jpg" alt="Attachment theory"></div>
+      <div class="sci-body">
+        <div class="sci-num">01</div>
+        <h3>Attachment theory &amp; longitudinal data</h3>
+        <p>Drawing from Bowlby, Hazan &amp; Shaver, and 40 years of attachment research, we model relational styles and predict long-term dyadic stability with validated psychometric instruments.</p>
+      </div>
     </div>
     <div class="sci-card">
-      <div class="sci-num">02</div>
-      <h3>Neurobiological compatibility markers</h3>
-      <p>We examine HLA-mediated immune diversity, oxytocin receptor polymorphisms, and cortisol synchrony — biological signals that influence pair bonding beyond conscious preference.</p>
+      <div class="sci-img"><img src="science2.jpg" alt="Neurobiological markers"></div>
+      <div class="sci-body">
+        <div class="sci-num">02</div>
+        <h3>Neurobiological compatibility markers</h3>
+        <p>We examine HLA-mediated immune diversity, oxytocin receptor polymorphisms, and cortisol synchrony — biological signals that influence pair bonding beyond conscious preference.</p>
+      </div>
     </div>
     <div class="sci-card">
-      <div class="sci-num">03</div>
-      <h3>Bayesian compatibility modelling</h3>
-      <p>Our matching algorithm is a probabilistic model, not a rule-set. It updates continuously from participant outcomes, treating each long-term relationship as new evidence.</p>
+      <div class="sci-img"><img src="science3.jpg" alt="Bayesian modelling"></div>
+      <div class="sci-body">
+        <div class="sci-num">03</div>
+        <h3>Bayesian compatibility modelling</h3>
+        <p>Our matching algorithm is a probabilistic model, not a rule-set. It updates continuously from participant outcomes, treating each long-term relationship as new evidence.</p>
+      </div>
     </div>
     <div class="sci-card">
-      <div class="sci-num">04</div>
-      <h3>Longitudinal outcome tracking</h3>
-      <p>Unlike survey-based studies, we track matched pairs at 3, 12, 36, and 60 months — measuring relationship quality, conflict resolution, and sustained satisfaction.</p>
+      <div class="sci-img"><img src="science4.jpg" alt="Longitudinal tracking"></div>
+      <div class="sci-body">
+        <div class="sci-num">04</div>
+        <h3>Longitudinal outcome tracking</h3>
+        <p>Unlike survey-based studies, we track matched pairs at 3, 12, 36, and 60 months — measuring relationship quality, conflict resolution, and sustained satisfaction.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -607,64 +622,34 @@
   </div>
 </section>
 
-class="team-card">
-      <div class="team-name">Dr. Alice Whitfield</div>
-      <div class="team-role">Longitudinal Research</div>
-      <div class="team-bio">Attachment theory, dyadic longitudinal methodology, relationship quality measurement.</div>
-    </div>
-    <div class="team-card">
-      <div class="team-name">Per Larsson</div>
-      <div class="team-role">Algorithm Engineer</div>
-      <div class="team-bio">Machine learning, probabilistic graphical models, large-scale data infrastructure.</div>
-    </div>
-    <div class="team-card">
-      <div class="team-name">Dr. Iris Romano</div>
-      <div class="team-role">Ethics &amp; Oversight</div>
-      <div class="team-bio">Research ethics, participant privacy, IRB liaison. Ensures all protocols meet international standards.</div>
-    </div>
-  </div>
-</section>
-
 <!-- PUBLICATIONS -->
 <section class="section" id="publications">
-  <div class="label">Our publications</div>
-  <h2 class="science-title">Peer-reviewed research.</h2>
+  <div class="label">Publications</div>
+  <h2 class="science-title">Our research on compatibility.</h2>
   <div>
     <div class="pub-item">
-      <div class="pub-year">2025</div>
-      <div>
-        <div class="pub-title">Predicting Long-Term Pair Stability: A Bayesian Approach to Multi-Variable Compatibility</div>
-        <div class="pub-authors">Reyes, M., Okafor, T., Chen, L. et al.</div>
+      <div class="pub-year">March 14, 2025</div>
+      <div class="pub-content">
+        <div class="pub-title">Selection Criteria in Online Dating: How Stated Preferences Diverge from Revealed Behavior at Scale</div>
         <div class="pub-journal">Journal of Personality and Social Psychology</div>
       </div>
-      <div class="pub-tag">Peer reviewed</div>
+      <a href="#" class="pub-read-btn">Read</a>
     </div>
     <div class="pub-item">
-      <div class="pub-year">2025</div>
-      <div>
-        <div class="pub-title">The Singular Battery: Development and Cross-Cultural Validation of a Comprehensive Compatibility Instrument</div>
-        <div class="pub-authors">Chen, L., Whitfield, A.</div>
-        <div class="pub-journal">Assessment</div>
+      <div class="pub-year">Nov 3, 2024</div>
+      <div class="pub-content">
+        <div class="pub-title">Algorithmic Bias in Dating Platforms: Homophily Amplification and Its Long-Term Effect on Partner Diversity</div>
+        <div class="pub-journal">ACM Conference on Fairness, Accountability and Transparency</div>
       </div>
-      <div class="pub-tag">Peer reviewed</div>
+      <a href="#" class="pub-read-btn">Read</a>
     </div>
     <div class="pub-item">
-      <div class="pub-year">2024</div>
-      <div>
-        <div class="pub-title">HLA Diversity and Romantic Preference: Replication and Extension in a Large Prospective Cohort</div>
-        <div class="pub-authors">Okafor, T., Larsson, P., Reyes, M.</div>
-        <div class="pub-journal">Evolution and Human Behavior</div>
+      <div class="pub-year">Jun 22, 2023</div>
+      <div class="pub-content">
+        <div class="pub-title">Physiological Synchrony During First Encounters: Cortisol and Heart Rate Coherence as Predictors of Romantic Chemistry</div>
+        <div class="pub-journal">Psychoneuroendocrinology</div>
       </div>
-      <div class="pub-tag">Peer reviewed</div>
-    </div>
-    <div class="pub-item">
-      <div class="pub-year">2024</div>
-      <div>
-        <div class="pub-title">Attachment Convergence in Long-Term Dyads: A 36-Month Longitudinal Study</div>
-        <div class="pub-authors">Whitfield, A., Chen, L.</div>
-        <div class="pub-journal">Developmental Psychology</div>
-      </div>
-      <div class="pub-tag">Preprint</div>
+      <a href="#" class="pub-read-btn">Read</a>
     </div>
   </div>
 </section>
@@ -801,7 +786,7 @@ class="team-card">
         revealObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0.25 });
 
   document.querySelectorAll('.reveal').forEach(function(el) {
     revealObserver.observe(el);
